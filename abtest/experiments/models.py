@@ -3,11 +3,11 @@ from django.contrib.auth import get_user_model
 
 
 class Experiment(models.Model):
-    key = models.CharField(max_lenght=250, verbose_name='Ключ')
+    key = models.CharField(max_length=250, verbose_name='Ключ')
     
 
 class Option(models.Model):
-    value = models.CharField(max_lenght=250, verbose_name='Название')
+    value = models.CharField(max_length=250, verbose_name='Название')
     probability = models.FloatField()
     experiment = models.ForeignKey(
         Experiment,
