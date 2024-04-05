@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from random import random
 
 
-class RubricViewSet(
+class ExperimentViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
@@ -14,9 +14,9 @@ class RubricViewSet(
     serializer_class = ExperimentSerializer
     
     def get_queryset(self):
-        token = self.request.headers('Device-Token')
-        if not token: 
+        if not 'Device-Token' in self.request.headers:
             return None
+        token = self.request.headers['Device-Token']
         device, created = Device.objects.get_or_create(Token=token)
         if created:
             experiments = Experiment.objects.all()
@@ -34,3 +34,10 @@ class RubricViewSet(
                         break
         queryset = Option_of_Device.objects.filter(device=device)
         return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if not 'Device-Token' in request.headers:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
