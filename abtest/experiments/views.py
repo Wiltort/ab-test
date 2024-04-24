@@ -3,7 +3,7 @@ from rest_framework import viewsets, mixins, status
 from .serializers import ExperimentSerializer
 from .models import Experiment, Device, Option_of_Device, Option
 from rest_framework.response import Response
-from random import random
+from random import random, seed
 
 
 class ExperimentViewSet(
@@ -21,6 +21,7 @@ class ExperimentViewSet(
         if created:
             experiments = Experiment.objects.all()
             for exp in experiments:
+                seed()
                 x = random()
                 s = 0
                 for opt in exp.options.all():
