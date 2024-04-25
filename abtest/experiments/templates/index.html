@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика</title>
+    <link rel="stylesheet" href="styles.css">
+
+
+</head>
+
+<body>
+    <h1>Статистика</h1>
+    <div class="chart">
+        <canvas id="myChart" width="400" height="300"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        const canvas = document.getElementById('myChart');
+
+        // Создаём объект Chart
+        const chart = new Chart(canvas, {
+            // Тип диаграммы
+            type: 'bar',
+
+            // Данные диаграммы
+            data: {
+                labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май'],
+                datasets: [{
+                    label: 'Продажи',
+                    data: [10, 20, 30, 40, 50],
+                    backgroundColor: 'rgb(255, 99, 132)'
+                }]
+            },
+
+            // Опции диаграммы
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+  
+</body>
+
+</html>
