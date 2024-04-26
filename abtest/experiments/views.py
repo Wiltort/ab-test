@@ -42,3 +42,15 @@ class ExperimentViewSet(
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+
+def index(request):
+    devices = Device.objects.all().count()
+    experiments = Experiment.objects.all()
+    statistic_data = {}
+    options = Option_of_Device.objects.all()
+    for exp in experiments:
+        statistic_data[exp.key] = {}
+    for opt in options:
+        
+    return render(request, "index.html", {"posts": latest})
