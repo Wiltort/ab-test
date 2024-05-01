@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from rest_framework import viewsets, mixins, status
 from .serializers import ExperimentSerializer
-from .models import Experiment, Device, Option_of_Device, Option
+from .models import Experiment, Device, Option_of_Device
 from rest_framework.response import Response
 from random import random, seed
 
@@ -12,9 +12,9 @@ class ExperimentViewSet(
 ):
     queryset = Option_of_Device.objects.all()
     serializer_class = ExperimentSerializer
-    
+
     def get_queryset(self):
-        if not 'Device-Token' in self.request.headers:
+        if 'Device-Token' not in self.request.headers:
             return None
         token = self.request.headers['Device-Token']
         device, created = Device.objects.get_or_create(Token=token)
@@ -26,10 +26,10 @@ class ExperimentViewSet(
                 s = 0
                 for opt in exp.options.all():
                     s += opt.probability
-                    if x*100 <= s or s >= 100:
+                    if x * 100 <= s or s >= 100:
                         Option_of_Device.objects.create(
-                            device=device, 
-                            experiment=exp, 
+                            device=device,
+                            experiment=exp,
                             option=opt
                         )
                         break
@@ -38,11 +38,11 @@ class ExperimentViewSet(
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        if not 'Device-Token' in request.headers:
+        if 'Device-Token' not in request.headers:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
+
 
 def index(request):
     devices = Device.objects.all().count()
@@ -52,5 +52,15 @@ def index(request):
     for exp in experiments:
         statistic_data[exp.key] = {}
     for opt in options:
-        
-    return render(request, "index.html", {"posts": latest})
+        statistic_data[opt.experiment.key][opt.option] = (
+            statistic_data[opt.experiment.key].get(opt.option, 0) + 1
+        )
+    return render(
+        request,
+        "index.html",
+        {
+            "devices": devices,
+            "experiments": experiments,
+            "statistic_data": statistic_data
+        }
+    )
