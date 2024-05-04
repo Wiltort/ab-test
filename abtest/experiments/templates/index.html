@@ -1,52 +1,30 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Статистика</title>
-    <link rel="stylesheet" href="styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
 
-
-</head>
-
-<body>
+  <body>
     <h1>Статистика</h1>
-    <div class="chart">
-        <canvas id="myChart" width="400" height="300"></canvas>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-
-        const canvas = document.getElementById('myChart');
-
-        // Создаём объект Chart
-        const chart = new Chart(canvas, {
-            // Тип диаграммы
-            type: 'bar',
-
-            // Данные диаграммы
-            data: {
-                labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май'],
-                datasets: [{
-                    label: 'Продажи',
-                    data: [10, 20, 30, 40, 50],
-                    backgroundColor: 'rgb(255, 99, 132)'
-                }]
-            },
-
-            // Опции диаграммы
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
-  
-</body>
-
+    <h2>Количество устройств: {{ devices }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Ключ</th>
+          <th>Распределение</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key,value in statistic_data.items %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{% for i,v in value.items %} {{ i }}: {{ v }} {% endfor %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
 </html>

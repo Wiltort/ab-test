@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from experiments.views import ExperimentViewSet
+from experiments.views import ExperimentViewSet, index
 
 
 urlpatterns = [
     path('api/experiments/', ExperimentViewSet.as_view({'get': 'list'})),
     path('admin/', admin.site.urls),
+    path('', index)
 ]

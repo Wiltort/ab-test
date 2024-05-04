@@ -52,8 +52,8 @@ def index(request):
     for exp in experiments:
         statistic_data[exp.key] = {}
     for opt in options:
-        statistic_data[opt.experiment.key][opt.option] = (
-            statistic_data[opt.experiment.key].get(opt.option, 0) + 1
+        statistic_data[opt.experiment.key][opt.option.value] = (
+            statistic_data[opt.experiment.key].get(opt.option.value, 0) + 1
         )
     return render(
         request,
